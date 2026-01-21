@@ -7,7 +7,6 @@
   export let show: boolean = false;
   export let isHero: boolean = false;
   export let onAnswerShown: (() => void) | null = null;
-  export let onAnswerHidden: (() => void) | null = null;
 
   let selectedChoice: number | null = null;
   let showAnswer = false;
@@ -25,15 +24,6 @@
         onAnswerShown();
       }
     }, 300);
-  }
-
-  // オーバーレイクリックで解説を閉じる
-  function closeAnswer() {
-    showAnswer = false;
-    selectedChoice = null;
-    if (onAnswerHidden) {
-      onAnswerHidden();
-    }
   }
 </script>
 
@@ -61,20 +51,17 @@
     </ul>
   </div>
 
-  <!-- 解説モーダルオーバーレイ -->
-  {#if showAnswer}
-    <div class="modal-overlay" on:click={closeAnswer}>
-      <div class="quiz-section__answer show" on:click|stopPropagation>
-        <h2>
-          {explanations[selectedChoice ?? 0]}
-        </h2>
-        {#if explanationImages[selectedChoice ?? 0]}
-          <div class="quiz-section__answer-image">
-            <img src={explanationImages[selectedChoice ?? 0]} loading="lazy" alt="" />
-          </div>
-        {/if}
-        <button class="close-button" on:click={closeAnswer}>閉じる</button>
-      </div>
+  <!-- 解説をインライン展開 -->
+  {#if showAnswer && selectedChoice !== null}
+    <div class="quiz-section__answer" class:show={showAnswer}>
+      <h2>
+        {explanations[selectedChoice]}
+      </h2>
+      {#if explanationImages[selectedChoice]}
+        <div class="quiz-section__answer-image">
+          <img src={explanationImages[selectedChoice]} loading="lazy" alt="" />
+        </div>
+      {/if}
     </div>
   {/if}
 </div>
@@ -157,52 +144,28 @@
     }
   }
 
-  // モーダルオーバーレイ
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.25);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    animation: fadeIn 0.3s ease;
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-  }
-
   .quiz-section__answer {
-    // background: rgba(0, 0, 0, 0.95);
-    // border: 2px solid #fff;
-    // border-radius: 1rem;
-    padding: 2rem;
-    max-width: 720px;
-    width: 100%;
-    max-height: 80vh;
-    overflow-y: auto;
+    margin-top: 3rem;
+    padding: 2rem 0;
     color: #fff;
-    animation: slideUp 0.3s ease;
 
-    @keyframes slideUp {
-      from {
-        transform: translateY(20px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
+    // 初期状態：非表示（高さなし）
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: max-height $fade-duration $fade-easing,
+                opacity $fade-duration $fade-easing,
+                visibility 0s $fade-duration;
+
+    // .showクラスが追加されたらフェードイン
+    &.show {
+      max-height: 2000px; // 十分な高さを確保
+      opacity: 1;
+      visibility: visible;
+      transition: max-height $fade-duration $fade-easing,
+                  opacity $fade-duration $fade-easing,
+                  visibility 0s 0s;
     }
 
     h2 {
@@ -218,24 +181,6 @@
         width: 100%;
         height: auto;
         line-height: 0;
-      }
-    }
-
-    .close-button {
-      display: block;
-      margin: 2rem auto 0;
-      padding: 0.75em 2em;
-      background: #fff;
-      color: #000;
-      border: none;
-      border-radius: 0.5em;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s, color 0.3s;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.8);
       }
     }
   }

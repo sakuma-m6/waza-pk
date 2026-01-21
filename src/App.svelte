@@ -176,7 +176,6 @@
         show={showQuestion}
         isHero={true}
         onAnswerShown={() => { showAnswerHero = true; }}
-        onAnswerHidden={() => { showAnswerHero = false; }}
       />
 
       <div class="hero-text">
@@ -198,7 +197,6 @@
         explanationImages={['images/d_1.png', 'images/d_1.png']}
         show={showQuestion1}
         onAnswerShown={() => { showAnswer1 = true; }}
-        onAnswerHidden={() => { showAnswer1 = false; }}
       />
 
       <div class="content-block-text">
@@ -220,7 +218,6 @@
         explanationImages={['images/d_1.png', 'images/d_1.png']}
         show={showQuestion2}
         onAnswerShown={() => { showAnswer2 = true; }}
-        onAnswerHidden={() => { showAnswer2 = false; }}
       />
 
       <div class="content-block-text">
@@ -242,7 +239,6 @@
         explanationImages={['images/d_1.png', 'images/d_1.png']}
         show={showQuestion3}
         onAnswerShown={() => { showAnswer3 = true; }}
-        onAnswerHidden={() => { showAnswer3 = false; }}
       />
 
       <div class="content-block-text">
