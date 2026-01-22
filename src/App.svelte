@@ -7,7 +7,7 @@
   const backgrounds = [
     {
       id: 'hero',
-      videoId: '6375289208112',
+      videoId: '6388031495112',
       poster: 'https://www.asahicom.jp/special/waza-racewalking/images/intro-bg.webp'
     },
     {
